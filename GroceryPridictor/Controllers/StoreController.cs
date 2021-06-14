@@ -30,16 +30,12 @@ namespace GroceryPridictor.Controllers
             {
             try
             {
-                CustomResponseModel<Store> model = new();
                 var store1 = context.Store.Where(s => s.StoreName == store.StoreName).FirstOrDefault();
                 if (store1 == null)
                 {
                     context.Store.Add(store);
                     context.SaveChanges();
-                    
-                    model.Message = "Store Added Successfully";
-                    model.Status = true;
-                    return Ok(model);
+                    return Ok("Store Added Successfully");
                 }
                 else
                 {
@@ -59,20 +55,12 @@ namespace GroceryPridictor.Controllers
         {
             try
             {
-                GetAllProductsClass model = new GetAllProductsClass();
                 var person = context.User.Where(s => s.Id == OwnerId).FirstOrDefault();
-                if (person != null) {
-
-                    model.Data = context.Product.Where(s => s.UserId == OwnerId).ToList();     
-                    model.Message = "Operation Successfull.";
-                    model.Status = true;
-                    return Ok(model);
+                if (person != null) {    
+                    return Ok(context.Product.Where(s => s.UserId == OwnerId).ToList());
                 }
                 else {
-                    model.Data = null;
-                    model.Message = "Can't get product list.";
-                    model.Status = false;
-                    return Ok(model);
+                    return Error("Can't get product list.");
                 }
             }
             catch (Exception ex) {
@@ -125,7 +113,6 @@ namespace GroceryPridictor.Controllers
         {
             try
             {
-                CustomResponseModel<Product> model = new();
                 var person = context.User.Where(s => s.Id == product.UserId).FirstOrDefault();
                 if (person != null)
                 {
@@ -134,7 +121,6 @@ namespace GroceryPridictor.Controllers
                         context.Product.Add(product);
                         context.SaveChanges();
                         return Ok("Product Saved Successfully.");
-
                     }
                     else
                     {
@@ -160,22 +146,15 @@ namespace GroceryPridictor.Controllers
         public IActionResult GetAllStores([FromQuery]int OwnerId)
         {
             try
-            {
-                GetAllStoresClass model = new GetAllStoresClass();
+            {   
                 var person = context.User.Where(s => s.Id == OwnerId).FirstOrDefault();
                 if (person != null)
                 {
-                    model.Data = context.Store.Where(s => s.UserId == OwnerId).ToList();
-                    model.Message = "Operation Successfull.";
-                    model.Status = true;
-                    return Ok(model);
+                    return Ok(context.Store.Where(s => s.UserId == OwnerId).ToList());
                 }
                 else
                 {
-                    model.Data = null;
-                    model.Message = "User with this id does not exists.";
-                    model.Status = false;
-                    return Ok(model);
+                    return Error("User with this id does not exists.");
                 }
             }
             catch (Exception ex)
@@ -191,20 +170,13 @@ namespace GroceryPridictor.Controllers
         {
             try
             {
-                CustomResponseModel<List<StoreCategory>> model = new();
-                
-                    model.Data = context.StoreCategory.ToList();
-                if (model.Data != null) { 
-                    model.Message = "Operation Successfull.";
-                    model.Status = true;
-                    return Ok(model);
+                var v = context.StoreCategory.ToList();
+                if (v != null) { 
+                    return Ok(v);
                 }
                 else
                 {
-                    model.Data = null;
-                    model.Message = "No Store Category found in database.";
-                    model.Status = false;
-                    return Ok(model);
+                    return Error("No Store Category found in database.");
                 }
             }
             catch (Exception ex)
@@ -220,25 +192,19 @@ namespace GroceryPridictor.Controllers
         {
             try
             {
-                CustomResponseModel<List<StoreCategory>> model = new ();
-                model.Data=context.Product.Select(x => new StoreCategory
+                 var v =context.Product.Select(x => new StoreCategory
                 {
                     Id = x.Id,
                     Category= x.Catagory
                 }).ToList();
               
-                if (model.Data != null)
+                if (v != null)
                 {
-                    model.Message = "Operation Successfull.";
-                    model.Status = true;
-                    return Ok(model);
+                    return Ok(v);
                 }
                 else
                 {
-                    model.Data = null;
-                    model.Message = "No Product Category found in database.";
-                    model.Status = false;
-                    return Ok(model);
+                    return Ok("No Product Category found in database.");
                 }
             }
             catch (Exception ex)

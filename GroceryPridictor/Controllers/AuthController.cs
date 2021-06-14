@@ -30,11 +30,11 @@ namespace GroceryPridictor.Controllers
                
                 var person = context.User.Where(s => s.UserName == UserName && s.Password == Password).FirstOrDefault();
                 if (person != null)
-                {
-                    model.Message = "Loged in Successfully.";
-                    model.Data = person.Id;
-                    model.Status = true;
-                    return Ok(model);
+                {//
+                //    model.Message = "Loged in Successfully.";
+                //    model.Data = person.Id;
+                //    model.Status = true;
+                    return Ok(person.Id);
                 }
                 else {
                     return Error("Wrong User Name or Password.");
@@ -51,7 +51,6 @@ namespace GroceryPridictor.Controllers
         {
             try
             {
-                CustomResponseModel model = new CustomResponseModel();
                 var person = context.User.Where(s => s.UserName == user.UserName && s.Password == user.Password).FirstOrDefault();
                 if (person == null)
                 {

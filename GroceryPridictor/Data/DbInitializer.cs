@@ -81,6 +81,7 @@ namespace GroceryPridictor.Data
             {
                 Console.WriteLine(ex.Message);
             }
-        } }
+        } 
+    }
 
 }

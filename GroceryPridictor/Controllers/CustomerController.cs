@@ -34,26 +34,26 @@ namespace GroceryPridictor.Controllers
                                 join pr in context.Product
                                on st.Id equals pr.StoreId
                                 select new Store
-                                {
+                                {   Id =st.Id,
                                     StoreName = st.StoreName,
                                     StoreCategoryId = st.StoreCategoryId,    
                                     Latitude = st.Latitude,
                                     Longitude = st.Longitude,
                                     UserId = st.UserId,
                                     Region = st.Region
-                                }).Where(x => x.Region == regio).ToListAsync(); ;
+                                }).Where(x => x.Region == regio).Distinct().ToListAsync(); 
                     if (prod != null)
                     {
                         if (!String.IsNullOrEmpty(searchResult))
                         {
                             string searchMatch = searchResult.Trim().ToLower();
-                            model.Data = prod.Where(e => e.StoreName.ToLower().Contains(searchMatch)).ToList();
+                            object v = prod.Where(e => e.StoreName.ToLower().Contains(searchMatch)).ToList();
+                            model.Data = (List<Store>)v;
                         }
-                        
-                        model.Message = "hello workd";
-                        model.Status = true;
-
-                        return Ok(model);
+                        else {
+                            model.Data = prod;                
+                        }
+                        return Ok(model.Data);
                     }
                     else
                     {
@@ -75,7 +75,6 @@ namespace GroceryPridictor.Controllers
         public ActionResult getNearByProducts(int UserId) {
             try
             {
-                CustomResponseModel<List<getNearByProductCategoryModel>> model = new();
                 int regio=4;
                 var person = context.User.Where(u => u.Id == UserId).FirstOrDefault();
                 if (person != null && person.Latitude != null && person.Longitude != null) {
@@ -85,7 +84,7 @@ namespace GroceryPridictor.Controllers
                              join pr in context.Product
                             on st.Id equals pr.StoreId
                              select new getNearByProductCategoryModel 
-                             {
+                             {              
                                  Name  = pr.Name,
                                  Price = pr.Price,
                                  Stock = pr.Stock,
@@ -95,11 +94,7 @@ namespace GroceryPridictor.Controllers
                              }).Where(x => x.Region == regio).ToList();
                     if (prod != null)
                     {
-                        model.Data = prod;
-                        model.Message = "hello workd";
-                        model.Status = true;
-
-                        return Ok(model);
+                        return Ok(prod);
                     }
                     else {
                         return Error("No Products avaliable in the area.");
@@ -112,6 +107,38 @@ namespace GroceryPridictor.Controllers
             catch(Exception ex) {
                 return Error(ex.Message);
             }
-        }        
+        }
+
+
+        [HttpGet]
+        public ActionResult getProductByStoreId(int StoreID)
+        {
+            try
+            {
+                int regio = 4;
+                var store = context.Store.Where(u => u.Id == StoreID).FirstOrDefault();
+                if (store != null)
+                {
+                   List<Product> products = context.Product.Where(x => x.StoreId == StoreID).ToList();
+                    if (products != null)
+                    {
+                        return Ok(products);
+                    }
+                    else
+                    {
+                        return Error("No Products avaliable in the area.");
+                    }
+                }
+                else
+                {
+                    return Error("User does not exists.");
+                }
+            }
+            catch (Exception ex)
+            {
+                return Error(ex.Message);
+            }
+        }
+
     }
 }

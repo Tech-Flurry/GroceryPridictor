@@ -36,11 +36,11 @@ namespace GroceryPridictor.Data
                 //Product
                 var products = new Product[]
                 {
-                new Product{Name="S10",Catagory="Phone",Price=123,Stock=123,StoreId=1,UserId= 1,Link="https://www.daraz.pk/products/samsung-s10-lite-8gb-ram-128gb-rom-4500-mah-battery-prism-white-i136130385-s1296426893.html?spm=a2a0e.searchlist.list.1.50bb5130LSO5Iz&search=1"},
-                new Product{Name="S9",Catagory="Phone",Price=123,Stock=13,StoreId=1,UserId= 1,Link="https://www.amazon.com/Samsung-Galaxy-S9-Display-Resistance/dp/B07WVRJQ7V/ref=sr_1_2?crid=2BXW75J7J6OU&dchild=1&keywords=samsung+s9&qid=1622466509&sprefix=samsung+s9%2Caps%2C445&sr=8-2"},
-                new Product{Name="Gtx1060",Catagory="GPU",Price=123,Stock=35,StoreId=2, UserId=2,Link="https://www.amazon.com/Asus-Phoenix-PH-GTX1060-3G-GeForce-Graphic/dp/B07VVMGP4G/ref=sr_1_10?dchild=1&keywords=gtx+1060&qid=1622466554&sr=8-10"},
-                new Product{Name="Gtx1050ti",Catagory="GPU",Price=123,Stock=35,StoreId=2, UserId=2,Link="https://www.amazon.com/ASUS-Geforce-Phoenix-Graphics-PH-GTX1050TI-4G/dp/B01M360WG6/ref=sr_1_1?dchild=1&keywords=gtx+1050ti&qid=1622530878&sr=8-1"},
-                new Product{Name="PS4",Catagory="Console",Price=123,Stock=35,StoreId=3, UserId=3,Link="https://www.amazon.com/PlayStation-Console-Light-System-Greatest-4/dp/B077QT6K94/ref=sr_1_2?dchild=1&keywords=ps4&qid=1622530950&sr=8-2"}
+                new Product{ProductId=2,Catagory="Sanitary",Price=123,Stock=123,StoreId=1,UserId= 1,Link="https://www.daraz.pk/products/samsung-s10-lite-8gb-ram-128gb-rom-4500-mah-battery-prism-white-i136130385-s1296426893.html?spm=a2a0e.searchlist.list.1.50bb5130LSO5Iz&search=1"},
+                new Product{ProductId=3,Catagory="Shampoo",Price=123,Stock=13,StoreId=1,UserId= 1,Link="https://www.amazon.com/Samsung-Galaxy-S9-Display-Resistance/dp/B07WVRJQ7V/ref=sr_1_2?crid=2BXW75J7J6OU&dchild=1&keywords=samsung+s9&qid=1622466509&sprefix=samsung+s9%2Caps%2C445&sr=8-2"},
+                new Product{ProductId=5,Catagory="Toothbrush",Price=123,Stock=35,StoreId=2, UserId=2,Link="https://www.amazon.com/Asus-Phoenix-PH-GTX1060-3G-GeForce-Graphic/dp/B07VVMGP4G/ref=sr_1_10?dchild=1&keywords=gtx+1060&qid=1622466554&sr=8-10"},
+                new Product{ProductId=6,Catagory="Laptop",Price=123,Stock=35,StoreId=2, UserId=2,Link="https://www.amazon.com/ASUS-Geforce-Phoenix-Graphics-PH-GTX1050TI-4G/dp/B01M360WG6/ref=sr_1_1?dchild=1&keywords=gtx+1050ti&qid=1622530878&sr=8-1"},
+                new Product{ProductId=4,Catagory="Shampoo",Price=123,Stock=35,StoreId=3, UserId=3,Link="https://www.amazon.com/PlayStation-Console-Light-System-Greatest-4/dp/B077QT6K94/ref=sr_1_2?dchild=1&keywords=ps4&qid=1622530950&sr=8-2"}
 
                 };
                 foreach (Product p in products)
@@ -75,6 +75,27 @@ namespace GroceryPridictor.Data
                     context.StoreCategory.Add(e);
                 }
                 context.SaveChanges();
+
+
+                //Products
+                var productModels = new productModel[]
+                {
+                    new productModel{ProductName="PowerSupply"},
+                    new productModel{ProductName="SanitaryPipe"},
+                    new productModel{ProductName="BlackSunsilk" },
+                    new productModel{ProductName="Lifebuoy" },
+                    new productModel{ProductName="OralB" },
+                    new productModel{ProductName="DellLaptop" },
+                    new productModel{ProductName="SamusungUHD" },
+                    new productModel{ProductName="PlayStation" },
+                    new productModel{ProductName="Xbox" }
+                };
+                foreach (productModel e in productModels)
+                {
+                    context.productModel.Add(e);
+                }
+                context.SaveChanges();
+
             }
 
             catch (Exception ex)

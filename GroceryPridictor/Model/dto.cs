@@ -46,7 +46,28 @@ namespace GroceryPridictor.Model
         public string Catagory { get; set; }
         public int Region { get; set; }
     }
+    public class getallstoredto {
+        public int Id { get; set; }
+        public string StoreName { get; set; }
+        public string Latitude { get; set; }
+        public string Longitude { get; set; }
+        public int UserId { get; set; }
+        public string Category { get; set; }
+        public int Region { get; set; }
 
 
+
+    }
+    public class storenewModel {
+        public int Id { get; set; }
+        public string StoreName { get; set; }
+        public string Latitude { get; set; }
+        public string Longitude { get; set; }
+        public int UserId { get; set; }
+        public int StoreCategoryId { get; set; }
+        public int Region { get; set; }
+        public string Category { get; set; }
+
+    }
 
 }

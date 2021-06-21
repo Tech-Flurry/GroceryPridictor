@@ -26,8 +26,8 @@ namespace GroceryPridictor.Controllers
 
         #region Add Store
         [HttpPost]
-        public IActionResult AddStore([FromQuery] Store store )
-            {
+        public IActionResult AddStore([FromQuery] Store store)
+        {
             try
             {
                 var store1 = context.Store.Where(s => s.StoreName == store.StoreName).FirstOrDefault();
@@ -35,7 +35,7 @@ namespace GroceryPridictor.Controllers
                 {
                     context.Store.Add(store);
                     context.SaveChanges();
-                    return Ok("Store Added Successfully");
+                    return Ok();
                 }
                 else
                 {
@@ -51,13 +51,27 @@ namespace GroceryPridictor.Controllers
 
         #region Get Product List by User Id
         [HttpGet]
-        public IActionResult GetAllProducts(int OwnerId)
+        public IActionResult GetAllProducts(int OwnerId, int storeId)
         {
             try
             {
                 var person = context.User.Where(s => s.Id == OwnerId).FirstOrDefault();
-                if (person != null) {    
-                    return Ok(context.Product.Where(s => s.UserId == OwnerId).ToList());
+                if (person != null) {
+                    var product =(from dd in  context.Product.Where(s => s.UserId == OwnerId && s.StoreId == storeId) join 
+                                  tt in context.productModel on dd.ProductId equals tt.Id
+                                  select new { 
+                                  dd.Id,
+                                  dd.Link,
+                                  dd.Price,
+                                  dd.Stock,
+                                  dd.StoreId,
+                                  dd.UserId,
+                                  dd.ProductId,
+                                  dd.Catagory,
+                                  tt.ProductName
+                                  });
+                           
+                    return Ok(product);
                 }
                 else {
                     return Error("Can't get product list.");
@@ -70,7 +84,7 @@ namespace GroceryPridictor.Controllers
         #endregion
 
         #region Delete Product
-    
+
         [HttpPost]
         public IActionResult DeleteProduct([FromQuery] int productid, int UserId, int storeId)
         {
@@ -80,12 +94,12 @@ namespace GroceryPridictor.Controllers
                 var person = context.User.Where(s => s.Id == UserId).FirstOrDefault();
                 if (person != null)
                 {
-                    var v = context.Product.Where(s => s.Id == productid&& s.StoreId == storeId).FirstOrDefault();
+                    var v = context.Product.Where(s => s.Id == productid && s.StoreId == storeId).FirstOrDefault();
                     if (v != null)
                     {
                         context.Product.Remove(v);
                         context.SaveChanges();
-                        return Ok("Product Deleted Successfully.");
+                        return Ok();
 
                     }
                     else
@@ -98,7 +112,7 @@ namespace GroceryPridictor.Controllers
                     return Error("No User found with id : " + UserId);
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return Error(ex.Message);
             }
@@ -116,11 +130,11 @@ namespace GroceryPridictor.Controllers
                 var person = context.User.Where(s => s.Id == product.UserId).FirstOrDefault();
                 if (person != null)
                 {
-                    var v = context.Product.Where(s => s.UserId == product.UserId && s.Name == product.Name).FirstOrDefault();
+                    var v = context.Product.Where(s => s.UserId == product.UserId && s.ProductId == product.ProductId).FirstOrDefault();
                     if (v == null) {
                         context.Product.Add(product);
                         context.SaveChanges();
-                        return Ok("Product Saved Successfully.");
+                        return Ok();
                     }
                     else
                     {
@@ -129,7 +143,7 @@ namespace GroceryPridictor.Controllers
                 }
                 else
                 {
-                    return Error("No User found with id : "+product.UserId);
+                    return Error("No User found with id : " + product.UserId);
                 }
             }
             catch (Exception ex)
@@ -143,14 +157,30 @@ namespace GroceryPridictor.Controllers
 
         #region ShopList
         [HttpGet]
-        public IActionResult GetAllStores([FromQuery]int OwnerId)
+        public IActionResult GetAllStores(int OwnerId)
         {
             try
-            {   
+            {
                 var person = context.User.Where(s => s.Id == OwnerId).FirstOrDefault();
                 if (person != null)
                 {
-                    return Ok(context.Store.Where(s => s.UserId == OwnerId).ToList());
+                    //var store = context.Store.Where(s => s.UserId == OwnerId).ToList();
+                    var store2 = (from st in context.Store
+                                  join
+                                    stc in context.StoreCategory
+                                         on st.StoreCategoryId equals stc.Id
+                                  select new getallstoredto
+                                  {
+                                      Id = st.Id,
+                                      StoreName = st.StoreName,
+                                      Region = st.Region,
+                                      Latitude = st.Latitude,
+                                      Longitude = st.Longitude,
+                                      Category = stc.Category,
+                                      UserId = st.UserId
+                                  }).Where(s => s.UserId == OwnerId).ToList();
+
+                    return Ok(store2);
                 }
                 else
                 {
@@ -171,7 +201,7 @@ namespace GroceryPridictor.Controllers
             try
             {
                 var v = context.StoreCategory.ToList();
-                if (v != null) { 
+                if (v != null) {
                     return Ok(v);
                 }
                 else
@@ -192,12 +222,12 @@ namespace GroceryPridictor.Controllers
         {
             try
             {
-                 var v =context.Product.Select(x => new StoreCategory
+                var v = context.Product.Select(x => new StoreCategory
                 {
                     Id = x.Id,
-                    Category= x.Catagory
+                    Category = x.Catagory
                 }).ToList();
-              
+
                 if (v != null)
                 {
                     return Ok(v);
@@ -206,6 +236,24 @@ namespace GroceryPridictor.Controllers
                 {
                     return Ok("No Product Category found in database.");
                 }
+            }
+            catch (Exception ex)
+            {
+                return Error(ex.Message);
+            }
+        }
+        #endregion
+
+
+
+        #region getProductsName
+        [HttpGet]
+        public IActionResult getproductNames()
+        {
+            try
+            {
+                var products = context.productModel.ToList();
+                return Ok(products);
             }
             catch (Exception ex)
             {

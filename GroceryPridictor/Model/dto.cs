@@ -69,5 +69,8 @@ namespace GroceryPridictor.Model
         public string Category { get; set; }
 
     }
-
+    class IdsAndIntmode {
+        public int UserId { get; set; }
+        public List<int> productIds { get; set; }
+    }
 }

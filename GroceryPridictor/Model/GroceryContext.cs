@@ -18,7 +18,7 @@ namespace GroceryPridictor.Model
         public DbSet<Store> Store { get; set; }
         public DbSet<StoreCategory> StoreCategory { get; set; }
         public DbSet<productModel> productModel { get; set; }
-
+        public DbSet<storenewModel> storenewModels { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<User>().ToTable("User");

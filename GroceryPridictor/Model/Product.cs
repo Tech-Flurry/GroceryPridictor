@@ -15,6 +15,7 @@ namespace GroceryPridictor.Model
         public int StoreId { get; set; }
         public int UserId { get; set; }
         public string Link { get; set; }
+        public string Discount { get; set; }
 
 
     }

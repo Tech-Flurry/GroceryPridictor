@@ -161,7 +161,7 @@ namespace GroceryPridictor.Controllers
 
 
         [HttpPost]
-        public ActionResult getStoresListbyProductList([FromQuery]int UserId, [FromQuery] int[] productIds)
+        public ActionResult getStoresListbyProductList([FromQuery]int UserId,[FromQuery]int[] productIds)
         {
             try
             {
@@ -281,6 +281,10 @@ namespace GroceryPridictor.Controllers
                 if (tt != null) {
                     return Ok(tt);
                 }
+                //else if (!tt?.Any() ?? false) 
+                //{
+                //    return Ok();
+                //}
                 
                    return Error("No stores found.");
                 

@@ -26,15 +26,15 @@ namespace GroceryPridictor.Controllers
         public IActionResult SignIn(string UserName, string Password) {
             try
             {
-                CustomResponseModel model = new CustomResponseModel();
+            //    CustomResponseModel model = new CustomResponseModel();
                
                 var person = context.User.Where(s => s.UserName == UserName && s.Password == Password).FirstOrDefault();
                 if (person != null)
                 {
-                    model.Message = "Loged in Successfully.";
-                    model.Data = person.Id;
-                    model.Status = true;
-                    return Ok(model);
+                //    model.Message = "Loged in Successfully.";
+                //    model.Data = person.Id;
+                //    model.Status = true;
+                    return Ok(person.Id);
                 }
                 else {
                     return Error("Wrong User Name or Password.");
@@ -42,7 +42,7 @@ namespace GroceryPridictor.Controllers
                
             }
             catch(Exception ex ){
-                return Error(ex.Message);
+                return Error("Failed");
             }
         }
 
@@ -51,13 +51,12 @@ namespace GroceryPridictor.Controllers
         {
             try
             {
-                CustomResponseModel model = new CustomResponseModel();
                 var person = context.User.Where(s => s.UserName == user.UserName && s.Password == user.Password).FirstOrDefault();
                 if (person == null)
                 {
                     context.User.Add(user);
                     context.SaveChanges();
-                    return Ok("Registed Successfully.");
+                    return Ok();
                 }
                 else {
                     return Error("User Already Exists.");

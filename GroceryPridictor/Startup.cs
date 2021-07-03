@@ -29,7 +29,8 @@ namespace GroceryPridictor
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<GroceryContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
-            services.AddControllers();
+            services.AddControllers().AddNewtonsoftJson();
+            
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "GroceryPridictor", Version = "v1" });
@@ -49,6 +50,7 @@ namespace GroceryPridictor
             app.UseHttpsRedirection();
 
             app.UseRouting();
+            app.UseStaticFiles();
 
             app.UseAuthorization();
 

@@ -8,13 +8,14 @@ namespace GroceryPridictor.Model
     public class Product
     {
         public int Id { get; set; }
-        public string Name { get; set; }
+        public int ProductId { get; set; }
         public int Stock { get; set; }
         public int Price { get; set; }
         public string Catagory { get; set; }
         public int StoreId { get; set; }
         public int UserId { get; set; }
         public string Link { get; set; }
+        public string Discount { get; set; }
 
 
     }
